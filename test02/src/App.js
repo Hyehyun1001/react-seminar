@@ -14,7 +14,7 @@ function App() {
         setCount(count + value);
 
         if (hds369(count + value)) {
-            alert('빵!');
+            setTimeout(() => alert('짝'), 200);
         }
     };
 
