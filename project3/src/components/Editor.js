@@ -1,7 +1,7 @@
 import "./Editor.css";
-import {useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Button from "./Button";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { emotionList, getFormattedDate } from "../util";
 import EmotionItem from "./EmotionItem";
 
@@ -21,12 +21,16 @@ const Editor = ({ initData, onSubmit }) => {
             });
         }
     }, [initData]);
-    const handleChangeEmotion = (emotionId) => {
-        setState({
+
+    const handleSubmit = () => {
+        onSubmit(state);
+    };
+    const handleChangeEmotion = useCallback((emotionId) => {
+        setState((state) => ({
             ...state,
             emotionId,
-        });
-    };
+        }));
+    }, []);
     const handleOnGoBack = () => {
         navigate(-1);
     }
@@ -43,17 +47,13 @@ const Editor = ({ initData, onSubmit }) => {
         });
     };
 
-    const handleSubmit = () => {
-        onSubmit(state);
-    };
-
     return (
         <div className="Editor">
             <div className="editor_section">
                 <h4>오늘의 날짜</h4>
                 <div className="input_wrapper">
                     <input type="date" value={state.date}
-                    onChange={handleChangeDate} />
+                           onChange={handleChangeDate} />
                 </div>
             </div>
             <div className="editor_section">
@@ -61,7 +61,7 @@ const Editor = ({ initData, onSubmit }) => {
                 <div className="input_wrapper emotion_list_wrapper">
                     {emotionList.map((it) => (
                         <EmotionItem key={it.id} {...it} onClick={handleChangeEmotion}
-                             isSelected={state.emotionId === it.id}/>
+                                     isSelected={state.emotionId === it.id}/>
                     ))}
                 </div>
             </div>
